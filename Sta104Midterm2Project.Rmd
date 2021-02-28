@@ -19,12 +19,37 @@ opts_chunk$set(tidy.opts=list(width.cutoff=70),tidy=TRUE)
 \newcommand*\circled[1]{\tikz[baseline=(char.base)]{
             \node[shape=circle,draw,inner sep=2pt] (char) {#1};}}
 
+```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
+#importing dataset
+library(readr)
+CovidA <- read_csv("CovidA.csv")
+```
 
 \circled{I} \textbf{Introduction}
 
 \circled{II} \textbf{Summary of Data}
+Thinking of doing the analysis on California, New York City, Florida, and Hawaii.
+subsetting the data:
+
+```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
+#subsetting data
+CovidA_sub = subset(CovidA,CovidA$State == "California"|CovidA$State == "New York City" | CovidA$State == "Florida" | CovidA$State == "Hawaii")
+```
 
 \circled{III} \textbf{Analysis}
+```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
+library(ggplot2)
+library(dplyr)
+```
+```{r,warning=FALSE,echo=FALSE}
+ggplot(data = CovidA_sub, aes(Month, Death)) +
+  geom_line(color = "steelblue", size = 1) +
+  geom_point(color="steelblue") + 
+  labs(title = "Monthly Covid Deaths compared to States",
+       subtitle = "Analysis of California, Florida, Hawaii & New York City Covid-19 Deaths ",
+       y = "Deaths", x = "Month") + 
+  facet_wrap(~ State)
+```
 
 
 \circled{IV} \textbf{Interpretation}
