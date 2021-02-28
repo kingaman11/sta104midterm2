@@ -28,6 +28,7 @@ CovidA <- read_csv("CovidA.csv")
 \circled{I} \textbf{Introduction}
 
 \circled{II} \textbf{Summary of Data}
+
 Thinking of doing the analysis on California, New York City, Florida, and Hawaii.
 subsetting the data:
 
@@ -42,9 +43,14 @@ library(ggplot2)
 library(dplyr)
 ```
 ```{r,warning=FALSE,echo=FALSE}
-ggplot(data = CovidA_sub, aes(Month, Death)) +
+#converting months as to not get confused by year so month 1 is January 2020 and month 14 is February 2021
+CovidA_sub_graph = CovidA_sub
+CovidA_sub_graph$Month[16] = 13
+CovidA_sub_graph$Month[21] = 14
+
+ggplot(data = CovidA_sub_graph, aes(Month, Death)) +
   geom_line(color = "steelblue", size = 1) +
-  geom_point(color="steelblue") + 
+  geom_point(color="steelblue",size = 2) + 
   labs(title = "Monthly Covid Deaths compared to States",
        subtitle = "Analysis of California, Florida, Hawaii & New York City Covid-19 Deaths ",
        y = "Deaths", x = "Month") + 
