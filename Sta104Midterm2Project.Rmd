@@ -27,8 +27,7 @@ CovidA <- read_csv("CovidA.csv")
 
 \circled{I} \textbf{Introduction}
 
-Covid-19 has vastly changed the way of how the world works. Millions of people in America are all unable to do their work properly and have been forced to work at home. We are currently analyzing an data set called CovidA. which lists all the months of states as will as there monthly deaths. We chose to instead subset the dataset and work with 4 states. We chose California, New York City, Florida, and Hawaii. We chose California because 
-that is where my partner and I are located and we would like to know more about California compared to other states. We chose New York City because NYC is a typically very popular spot for visitors and we were curious on how the analysis will work with an heavily populated city with Corona. We chose Hawaii because despite the fact that is an very famous spot for tourists, people have not been going there because of heavy fines indicted by the government of Hawaii, which leaves us curious on how they have been reacting to Corona deaths. We also chose Florida largely because it is one of the only states where nobody believed in the Coronavirus. All the bars, indoor dining and tourism is rampant over there with the state not caring if anyone wears a mask. We are curious on how Florida is doing in terms of the virus compared to states that are very progressive and strict on guidelines such as California and Hawaii. 
+Covid-19 has vastly changed the way of how the world works. Millions of people in America are all unable to do their work properly and have been forced to work at home. We are currently analyzing an data set called CovidA. which lists all the months of states as will as there monthly deaths. We chose to instead subset the dataset and work with 4 states. We chose California, New York City, Florida, and Hawaii. We chose California because that is where my partner and I are located and we would like to know more about California compared to other states. We chose New York City because NYC is a typically very popular spot for visitors and we were curious on how the analysis will work with an heavily populated city with Corona. We chose Hawaii because despite the fact that is an very famous spot for tourists, people have not been going there because of heavy fines indicted by the government of Hawaii, which leaves us curious on how they have been reacting to Corona deaths. We also chose Florida largely because it is one of the only states where nobody believed in the Coronavirus. All the bars, indoor dining and tourism is rampant over there with the state not caring if anyone wears a mask. We are curious on how Florida is doing in terms of the virus compared to states that are very progressive and strict on guidelines such as California and Hawaii. 
 
 ```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
 #subsetting data
@@ -36,6 +35,34 @@ CovidA_sub = subset(CovidA,CovidA$State == "California"|CovidA$State == "New Yor
 ```
 
 \circled{II} \textbf{Summary of Data}
+```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
+CovidA_sub$Rank = rank(CovidA_sub$Death, ties = "average")
+Group.order = aggregate(Death ~ State, data = CovidA_sub, mean)$State
+Xi = aggregate(Death ~ State, data = CovidA_sub, mean)$Death
+si = aggregate(Death ~ State, data = CovidA_sub, sd)$Death
+Ri = aggregate(Rank ~ State, data = CovidA_sub, mean)$Rank
+ni = aggregate(Death ~ State, data = CovidA_sub, length)$Death
+results = rbind(Xi,si,Ri,ni)
+rownames(results) = c("Group Mean","Group SD","Rank Mean","Sample Size")
+colnames(results) = as.character(Group.order)
+results
+```
+
+
+\begin{table}[ht]
+\centering
+\caption{Summary Statistics}
+\begin{tabular}[t]{lcccc}
+\hline
+& California & Florida & Hawaii & New York City\\
+\hline
+Group Mean & 4256.750 & 2465.00000 & 59.40000 & 3718.200\\
+Group SD & 5673.232 & 1863.53750 & 42.52999 & 6302.866\\
+Rank Mean & 14.250 & 13.71429 & 3.20000 & 12.400\\
+Sample Size & 4.000 & 7.00000 & 5.00000 & 5.000\\ 
+\hline
+\end{tabular}
+\end{table}%
 
 
 ```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
