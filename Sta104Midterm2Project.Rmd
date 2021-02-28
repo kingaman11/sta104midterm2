@@ -77,7 +77,7 @@ levene.test(CovidA_sub$Death,as.factor(CovidA_sub$State))
 
 We see from the Shapiro- Wilks test based on the hypothesis that the variable is normally distributed in the dataset. We see that since the p-value is really low, we reject the null hypothesis and confirm that that the variable is not normally distributed. We also use the Levene test to test if K samples have equal variances and find that we fail to reject the null hypothesis thus concluding that no violations of any assumptions have happened. 
 
-In this forthcoming graph, I purposely ended up changing the dataset where I made an replica of the subsetted graph that we had from the CovidA dataset. I than changed the months to where month 1 was January of 2020 and month 14 was February of 2021. This helped in viewing the graphs as there was not data for every month and when I first did the graph, specifically for NYC, there was no data of February of 202 but there was of February 2021. However, the reason why I changed it was because that data of 2021 was showing up earlier in the 2020 panel which was messing up the graph thus the reason as to why I changed the index. 
+In this forthcoming graph, I purposely ended up changing the dataset where I made an replica of the subsetted graph that we had from the CovidA dataset. I than changed the months to where month 1 was January of 2020 and month 14 was February of 2021. This helped in viewing the graphs as there was not data for every month and when I first did the graph, specifically for NYC, there was no data of February of 202 but there was of February 2021. However, the reason why I changed it was because that data of 2021 was showing up earlier in the 2020 panel which was messing up the graph thus the reason as to why I changed the index. I also added another column in the dataset which has the abbreviation names for the months for aesthetically pleasing graphs using GGplot.
 
 ```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
 library(ggplot2)
@@ -87,6 +87,7 @@ library(dplyr)
 #converting months as to not get confused by year so month 1 is January 2020 and month 14 is February 2021
 CovidA_sub_graph = CovidA_sub
 CovidA_sub_graph$Month[19] = 14
+CovidA_sub_graph$month.name = month.abb[CovidA_sub$Month]
 #ggplot graph with facetwrap
 ggplot(data = CovidA_sub_graph, aes(Month, Death)) +
   geom_line(color = "steelblue", size = 1) +
@@ -94,10 +95,12 @@ ggplot(data = CovidA_sub_graph, aes(Month, Death)) +
   labs(title = "Monthly Covid Deaths compared to States",
        subtitle = "Analysis of California, Florida, Alabama & New York City Covid-19 Deaths",
        y = "Deaths", x = "Month") + 
-  facet_wrap(~ State)
+  facet_wrap(~ State) +
+  theme_bw()+
+  geom_text(aes(label=month.name),hjust=.5, vjust=0)
 ```
 
-We see here that surprisingly, there were a lot of deaths in California, despite it being a much more Democratic and very progressive state. While they had it mostly low, the sudden increase in deaths was due to the fact that it was December, and people were probably visiting their friends and loved ones regardless which led to an increase in deaths. Florida, in this case is very surprising how they have managed to keep their deaths down despite the fact that everything is open there and nobody believes in the virus. Alabama while is not too surprising because its not as a popular spot to travel to and is not know for tourism. However, it is a shock that not too many deaths happened there as it is a republican state and indoor dining has been going on regardless of the pandemic. 
+We see here that surprisingly, there were a lot of deaths in California, despite it being a much more Democratic and very progressive state. While they had it mostly low, the sudden increase in deaths was due to the fact that it was December, and people were probably visiting their friends and loved ones regardless which led to an increase in deaths. Florida, in this case is very surprising how they have managed to keep their deaths down despite the fact that everything is open there and nobody believes in the virus. Alabama while is not too surprising because its not as a popular spot to travel to and is not know for tourism. However, it is a shock that not too many deaths happened there as it is a republican state and indoor dining has been going on regardless of the pandemic. NYC it seems like had the most death earlier on in 202, which makes sense as a lot of people still weren't the processing the fact of how serious the pandemic was and so people were still traveling and doing work as well as flights beiing very active which shows in the graph a to why NYC had too many deaths in April of 2020. 
 
 \circled{III} \textbf{Analysis}
 
