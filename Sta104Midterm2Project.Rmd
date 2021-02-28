@@ -63,6 +63,16 @@ ggplot(data = CovidA_sub_graph, aes(Month, Death)) +
 \circled{V} \textbf{Conclusion}
 
 \newpage
+\circled{I} \textbf{Introduction}
+
+\circled{II} \textbf{Summary of Data}
+
+
+\circled{IV} \textbf{Interpretation}
+
+\circled{V} \textbf{Conclusion}
+
+\newpage
 \circled{VI} \center{\textbf{Code Appendix}}
 ```{r, ref.label=knitr::all_labels(),echo=TRUE,eval=FALSE}
 ```
