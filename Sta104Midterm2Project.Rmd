@@ -45,8 +45,9 @@ ni = aggregate(Death ~ State, data = CovidA_sub, length)$Death
 results = rbind(Xi,si,Ri,ni)
 rownames(results) = c("Group Mean","Group SD","Rank Mean","Sample Size")
 colnames(results) = as.character(Group.order)
-results
+SR.2 = var(CovidA_sub$Rank)
 ```
+
 
 
 \begin{table}[ht]
