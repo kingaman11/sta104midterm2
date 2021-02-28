@@ -48,8 +48,6 @@ colnames(results) = as.character(Group.order)
 SR.2 = var(CovidA_sub$Rank)
 ```
 
-
-
 \begin{table}[ht]
 \centering
 \caption{Summary Statistics}
@@ -65,6 +63,21 @@ Sample Size & 4.000 & 7.00000 & 5.00000 & 5.000\\
 \end{tabular}
 \end{table}%
 
+```{r,warning=FALSE,echo=FALSE}
+Ano = aov(Death ~ State,data = CovidA_sub)
+par(mfrow=c(1,2))
+plot(Ano,1)
+plot(Ano,2)
+```
+```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
+shapiro.test(CovidA_sub$Death)
+library(lawstat)
+levene.test(CovidA_sub$Death,as.factor(CovidA_sub$State))
+```
+
+We see from the Shapiro- Wilks test based on the hypothesis that the variable is normally distributed in the dataset. We see that since the p-value is really low, we reject the null hypothesis and confirm that that the variable is not normally distributed. We also use the Levene test to test if K samples have equal variances and find that we fail to reject the null hypothesis thus concluding that no violations of any assumptions have happened. 
+
+In this forthcoming graph, I purposely ended up changing the dataset where I made an replica of the subsetted graph that we had from the CovidA dataset. I than changed the months to where month 1 was January of 2020 and month 14 was February of 2021. This helped in viewing the graphs as there was not data for every month and when I first did the graph, specifically for NYC, there was no data of February of 202 but there was of February 2021. However, the reason why I changed it was because that data of 2021 was showing up earlier in the 2020 panel which was messing up the graph thus the reason as to why I changed the index. 
 
 ```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
 library(ggplot2)
@@ -85,6 +98,7 @@ ggplot(data = CovidA_sub_graph, aes(Month, Death)) +
   facet_wrap(~ State)
 ```
 
+We see here that surprisingly, there were a lot of deaths in California, despite it being a much more Democratic and very progressive state. While they had it mostly low, the sudden increase in deaths was due to the fact that it was December, and people were probably visiting their friends and loved ones regardless which led to an increase in deaths. 
 
 \circled{III} \textbf{Analysis}
 
