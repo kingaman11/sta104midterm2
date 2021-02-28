@@ -52,7 +52,7 @@ ggplot(data = CovidA_sub_graph, aes(Month, Death)) +
   geom_line(color = "steelblue", size = 1) +
   geom_point(color="steelblue",size = 2) + 
   labs(title = "Monthly Covid Deaths compared to States",
-       subtitle = "Analysis of California, Florida, Hawaii & New York City Covid-19 Deaths ",
+       subtitle = "Analysis of California, Florida, Hawaii & New York City Covid-19 Deaths",
        y = "Deaths", x = "Month") + 
   facet_wrap(~ State)
 ```
