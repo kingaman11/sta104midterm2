@@ -62,7 +62,7 @@ SR.2 = var(CovidA_sub$Rank)
 \textbf{Sample Size} & 4.000 & 7.00000 & 3.00000 & 5.000\\ 
 \hline
 \end{tabular}
-\end{table}%
+\end{table}
 
 ```{r,warning=FALSE,echo=FALSE}
 #Anova Test
