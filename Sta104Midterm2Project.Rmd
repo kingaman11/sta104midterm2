@@ -36,6 +36,7 @@ CovidA_sub = subset(CovidA,CovidA$State == "California"|CovidA$State == "New Yor
 
 \circled{II} \textbf{Summary of Data}
 ```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
+#summary of data with mean,sd, rank,sample size
 CovidA_sub$Rank = rank(CovidA_sub$Death, ties = "average")
 Group.order = aggregate(Death ~ State, data = CovidA_sub, mean)$State
 Xi = aggregate(Death ~ State, data = CovidA_sub, mean)$Death
@@ -64,12 +65,14 @@ SR.2 = var(CovidA_sub$Rank)
 \end{table}%
 
 ```{r,warning=FALSE,echo=FALSE}
+#Anova Test
 Ano = aov(Death ~ State,data = CovidA_sub)
 par(mfrow=c(1,2))
 plot(Ano,1)
 plot(Ano,2)
 ```
 ```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
+#shapiro test and levene test
 shapiro.test(CovidA_sub$Death)
 library(lawstat)
 levene.test(CovidA_sub$Death,as.factor(CovidA_sub$State))
@@ -85,6 +88,7 @@ library(ggplot2)
 library(dplyr)
 ```
 ```{r,warning=FALSE,echo=FALSE}
+#line graph
 #converting months as to not get confused by year so month 1 is January 2020 and month 14 is February 2021
 CovidA_sub_graph = CovidA_sub
 CovidA_sub_graph$Month[19] = 14
@@ -106,6 +110,7 @@ We see here that surprisingly, there were a lot of deaths in California, despite
 Lastly we also graph the distribution of deaths in order to analyze which test we would be using, the F-test or the Kruskal-Wallis Test.
 
 ```{r,warning=TRUE,echo=FALSE,results=FALSE,message = FALSE,include=TRUE,fig.align="center",out.width="80%"}
+#Boxplot
 ggplot(CovidA_sub, aes(x=Death, y=State,color = State)) + 
   geom_boxplot() +
   coord_flip() +
@@ -120,13 +125,58 @@ Looking at this dataset, we see that there are outliers in multiple groups as we
 
 Since we have seen that we will be using the Kruskal - Wallis Test, we will be using ranks instead of the actual $X_{ij}$ values. We will then make an Confidence Interval to see the difference in ranks. Our null hypothesis in using the Kruskal - Wallis Test is:
 
+\begin{center}
 $H_0: F_1(x) = F_2(x) = F_3(x) = F_4(x)$
 
-$H_A: F_i(x) \ge F_j(x)$ or $F_i(x) \le F_j(x)$ for some $i \ne j$
+$H_A: F_i(x) \ge F_j(x)$  or $F_i(x) \le F_j(x)$ for some i $\ne$ j
+
+\end{center}
+
+```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
+#KW Test
+set.seed(1)
+N = nrow(CovidA_sub)
+KW.OBS = 1/SR.2*sum(ni*(Ri - (N+1)/2)^2) #Note, this assumes you calculate ni and Ri above
+R = 4000
+many.perms.KW = sapply(1:R,function(i){
+  permuted.data = CovidA_sub #So we don't overwrite the original data
+  permuted.data$Group = sample(permuted.data$State, nrow(permuted.data), replace = FALSE) #Permuting the groups
+  SR.2 = var(permuted.data$Rank)
+  ni = aggregate(Rank ~ Group, data = permuted.data,length)$Rank
+  Ri = aggregate(Rank ~ Group, data = permuted.data,mean)$Rank
+  KW.i= 1/SR.2*sum(ni*(Ri - (N+1)/2)^2) 
+  return(KW.i)
+})
+p.value = mean(many.perms.KW > KW.OBS)
+```
+
+We than perform the test and find that using the KW test with 4000 permutations gives an p-value of .3395.
+
+##Dont know if we want to include this yet
+We also perform an Permutation Test and find that the p-value while setting the seed presented .7025. This also showed an similar result as the KW test. 
+
+```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
+#Permutation Test
+set.seed(2)
+R = 4000
+many.perms = sapply(1:R,function(i){
+  permuted.data = CovidA_sub #So we don't overwrite the original data
+  permuted.data$State = sample(permuted.data$State, nrow(permuted.data), replace = FALSE) #Permuting the groups
+  Fi = summary(lm(Death ~ State, data = permuted.data))$fstatistic["value"]
+  return(Fi)
+})
+F.OBS = summary(lm(Death ~ State, data = CovidA_sub))$fstatistic["value"]
+mean(many.perms >= F.OBS)
+
+```
 
 \circled{IV} \textbf{Interpretation}
 
+Since the P-value was larger than $\alpha$, we conclude that we fail to reject the null hypothesis thus meaning that all the groups are similar and that none of any 2 groups are statistically significant from each other. Since we fail to reject the null hypothesis we find that there is no point in finding out which groups are significantly different from each other which results in us ending our test.
+
 \circled{V} \textbf{Conclusion}
+
+We conclude thus that all the 4 groups are all similar with none of them being statistically significant. This comes to us as shocking as Democrats being California & NYC have been enforcing very serious covid restrictions. I also expected the Republican states being Alabama and Florida groups to differ. However, we should also not take this conclusion as an definite answer as there are many other confounding variables in play such as the fact that the population size in California and NYC combined is almost 60 million people. On the other side, Alabama and Florida have a combined of only 25 million. Thus it is more likely to result in more deaths in California and NYC compared to Alabama and Florida. There are also many other confounding variables that we should account for in our analysis such as weather, amount of people traveling between states, age of the population, and even how all the data was collected and arranged. There has been a lot of fake data spread around such as mentioned earlier with the data scientist. We might never be able to get an accurate depiction on whether the states are statistically significant or not due to misconception of data.
 
 \newpage
 \circled{I} \textbf{Introduction}
