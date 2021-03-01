@@ -27,7 +27,7 @@ CovidA <- read_csv("CovidA.csv")
 
 \circled{I} \textbf{Introduction}
 
-Covid-19 has vastly changed the way of how the world works. Millions of people in America are all unable to do their work properly and have been forced to work at home. We are currently analyzing an data set called CovidA. which lists all the months of states as will as there monthly deaths. We chose to instead subset the dataset and work with 4 states. We chose California, New York City, Florida, and Alabama. We chose California because that is where my partner and I are located and we would like to know more about California compared to other states. We chose New York City because NYC is a typically very popular spot for visitors and we were curious on how the analysis will work with an heavily populated city with Corona. We chose Alabama because they are an republican state are are widely known for not believeing in the Coronavirus. We also chose Florida largely because it is one of the only states where nobody believed in the Coronavirus. All the bars, indoor dining and tourism is rampant over there with the state not caring if anyone wears a mask. We are curious on how Florida and Alabama is doing in terms of the virus compared to states that are very progressive and strict on guidelines such as California and NYC. 
+Covid-19 has vastly changed the way of how the world works. Millions of people in America are all unable to do their work properly and have been forced to work at home. We are currently analyzing a data set called CovidA. which lists all the months of states as well as their monthly deaths. We chose to instead subset the dataset and work with 4 states. We chose California, New York City, Florida, and Alabama. We chose California because that is where my partner and I are located and we would like to know more about California compared to other states. We chose New York City because NYC is a typically very popular spot for visitors and we were curious on how the analysis will work with a heavily populated city with Corona. Both of those states listed are also heavily Democratic. We chose Alabama because they are an republican state that is widely known for not believing in the Coronavirus. We also chose Florida largely because it is one of the only states where nobody ever believed in the Coronavirus. All the bars, indoor dining and tourism is rampant over there with the state not caring if anyone wears a mask. We are curious on how Florida and Alabama is doing in terms of the virus compared to states that are very progressive and strict on guidelines such as California and NYC. We also picked these states mainly because we really wanted to see if the Democratic way or the Republican way ultimately ends up in the result or not. Since we want to compare multiple groups, we will be using the K- sample method which is very useful in analyzing groups. We will be using multiple tests such as the Shapiro - Wilks Test and the Levene Test to determine whether to use the Permutation Test or the Kruskal-Wallis Test.
 
 ```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
 #subsetting data
@@ -53,12 +53,12 @@ SR.2 = var(CovidA_sub$Rank)
 \caption{Summary Statistics}
 \begin{tabular}[t]{lcccc}
 \hline
-& California & Florida & Alabama & New York City\\
+& \textbf{California} & \textbf{Florida} & \textbf{Alabama} & \textbf{New York City}\\
 \hline
-Group Mean & 4256.750 & 2465.00000 & 315.666667 & 3718.200\\
-Group SD & 5673.232 & 1863.53750 & 257.663217 & 6302.866\\
-Rank Mean & 11.750 & 11.42857 & 4.666667 & 9.800\\
-Sample Size & 4.000 & 7.00000 & 3.00000 & 5.000\\ 
+\textbf{Group Mean} & 4256.750 & 2465.00000 & 315.666667 & 3718.200\\
+\textbf{Group SD} & 5673.232 & 1863.53750 & 257.663217 & 6302.866\\
+\textbf{Rank Mean} & 11.750 & 11.42857 & 4.666667 & 9.800\\
+\textbf{Sample Size} & 4.000 & 7.00000 & 3.00000 & 5.000\\ 
 \hline
 \end{tabular}
 \end{table}%
@@ -77,7 +77,8 @@ levene.test(CovidA_sub$Death,as.factor(CovidA_sub$State))
 
 We see from the Shapiro- Wilks test based on the hypothesis that the variable is normally distributed in the dataset. We see that since the p-value is really low, we reject the null hypothesis and confirm that that the variable is not normally distributed. We also use the Levene test to test if K samples have equal variances and find that we fail to reject the null hypothesis thus concluding that no violations of any assumptions have happened. 
 
-In this forthcoming graph, I purposely ended up changing the dataset where I made an replica of the subsetted graph that we had from the CovidA dataset. I than changed the months to where month 1 was January of 2020 and month 14 was February of 2021. This helped in viewing the graphs as there was not data for every month and when I first did the graph, specifically for NYC, there was no data of February of 202 but there was of February 2021. However, the reason why I changed it was because that data of 2021 was showing up earlier in the 2020 panel which was messing up the graph thus the reason as to why I changed the index. I also added another column in the dataset which has the abbreviation names for the months for aesthetically pleasing graphs using GGplot.
+In this forthcoming graph, I purposely ended up changing a dataset column where I made a replica of the subsetted graph that we had from the CovidA dataset. I then changed the months to where month 1 was January of 2020 and month 14 was February of 2021. This helped in viewing the graphs as there was no data for every month and when I first did the graph, specifically for NYC, there was no data of February of 2020 but there was of February 2021. This confused GGplot and instead of skipping February of 2020, it displayed the plot of February 2021 instead, which changes the whole graph. I also added another column in the dataset which has the abbreviation names for the months for aesthetically pleasing graphs using GGplot. This graph really helps visualize the whole dataset and understand what we will be doing in this analysis. 
+
 
 ```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
 library(ggplot2)
@@ -100,9 +101,9 @@ ggplot(data = CovidA_sub_graph, aes(Month, Death)) +
   geom_text(aes(label=month.name),hjust=.5, vjust=0)
 ```
 
-We see here that surprisingly, there were a lot of deaths in California, despite it being a much more Democratic and very progressive state. While they had it mostly low, the sudden increase in deaths was due to the fact that it was December, and people were probably visiting their friends and loved ones regardless which led to an increase in deaths. Florida, in this case is very surprising how they have managed to keep their deaths down despite the fact that everything is open there and nobody believes in the virus. Alabama while is not too surprising because its not as a popular spot to travel to and is not know for tourism. However, it is a shock that not too many deaths happened there as it is a republican state and indoor dining has been going on regardless of the pandemic. NYC it seems like had the most death earlier on in 202, which makes sense as a lot of people still weren't the processing the fact of how serious the pandemic was and so people were still traveling and doing work as well as flights being very active which shows in the graph a to why NYC had too many deaths in April of 2020. 
+We see here that surprisingly, there were a lot of deaths in California, despite it being a much more Democratic and very progressive state. While they had it mostly low, the sudden increase in deaths was due to the fact that it was December, and people were probably visiting their friends and loved ones regardless which led to an increase in deaths. Florida, in this case, is very surprising how they have managed to keep their deaths down despite the fact that everything is open there and nobody believes in the virus. However, there have been multiple stories of Florida faking their death count as they want to remain open and not face criticism. Infact, during the beginning of the pandemic and data scientist was fired because she refused to fib the numbers of the death count. Alabama is not too surprising because it's not a popular spot to travel to and is not known for tourism. However, it is a shock that not too many deaths happened there as it is a republican state and indoor dining has been going on regardless of the pandemic. I would not be surprised if Alabama might be lying in its death count as well. NYC it seems like had the most death earlier on in 2020, which makes sense as a lot of people still weren't the processing the fact of how serious the pandemic was and so people were still traveling and doing work as well as flights being very active which shows in the graph as to why NYC had too many deaths in April of 2020. People also weren't walking around with masks and were enjoying their life as well. New York City is also known for a lot of consulting jobs as well which is why it makes me think that led to can increase in cases as consulting companies require its employees to travel to meet clients which leads to more deaths and further rampant spreading. 
 
-Lastly we also graph the distribution of deaths in order to analyze which test we would be using, the F-test or the Kruskall-Wallis Test.
+Lastly we also graph the distribution of deaths in order to analyze which test we would be using, the F-test or the Kruskal-Wallis Test.
 
 ```{r,warning=TRUE,echo=FALSE,results=FALSE,message = FALSE,include=TRUE,fig.align="center",out.width="80%"}
 ggplot(CovidA_sub, aes(x=Death, y=State,color = State)) + 
@@ -113,10 +114,15 @@ ggplot(CovidA_sub, aes(x=Death, y=State,color = State)) +
        subtitle = "Analysis of California, Florida, Alabama & New York City Covid-19 Deaths",
        y = "Deaths", x = "Deaths per month")
 ```
-Looking at this dataset, we see that there are outliers in multiple groups as well as skewed distributions as well. This leads us to believe to use the Kruskal - Wallis Test in order to understand the results a bit more. We also use Kruskal - Wallis as it has more power than a permutation test when exposed to outliers, or an skewed distribution in 1 or more of the groups. We will be using the regular Kruskal - Wallis Test as the Large Sample Approximation requires the sample size to be n $\ge$ 30 which in this case is only 19. 
+Looking at this dataset, we see that there are outliers in multiple groups as well as skewed distributions as well. This leads us to believe to use the Kruskal - Wallis Test in order to understand the results a bit more. We also use Kruskal - Wallis as it has more power than a permutation test when exposed to outliers, or a skewed distribution in 1 or more of the groups. We will be using the regular Kruskal - Wallis Test as the Large Sample Approximation requires the sample size to be n $\ge$ 30 which in this case is only 19. 
 
 \circled{III} \textbf{Analysis}
 
+Since we have seen that we will be using the Kruskal - Wallis Test, we will be using ranks instead of the actual $X_{ij}$ values. We will then make an Confidence Interval to see the difference in ranks. Our null hypothesis in using the Kruskal - Wallis Test is:
+
+$H_0: F_1(x) = F_2(x) = F_3(x) = F_4(x)$
+
+$H_A: F_i(x) \ge F_j(x)$ or $F_i(x) \le F_j(x)$ for some $i \ne j$
 
 \circled{IV} \textbf{Interpretation}
 
