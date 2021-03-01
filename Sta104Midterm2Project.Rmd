@@ -117,9 +117,9 @@ ggplot(CovidA_sub, aes(x=Death, y=State,color = State)) +
   geom_dotplot(binaxis='y', stackdir='center', dotsize=.8) + 
   labs(title = "Monthly Covid Deaths compared to States",
        subtitle = "Analysis of California, Florida, Alabama & New York City Covid-19 Deaths",
-       y = "Deaths", x = "Deaths per month")
+       y = "States", x = "Deaths per month")
 ```
-Looking at this dataset, we see that there are outliers in multiple groups as well as skewed distributions as well. This leads us to believe to use the Kruskal - Wallis Test in order to understand the results a bit more. We also use Kruskal - Wallis as it has more power than a permutation test when exposed to outliers, or a skewed distribution in 1 or more of the groups. We will be using the regular Kruskal - Wallis Test as the Large Sample Approximation requires the sample size to be n $\ge$ 30 which in this case is only 19. 
+Looking at this dataset, we see that there are outliers in multiple groups as well as skewed distributions as well. This leads us to believe to use the Kruskal - Wallis Test in order to understand the results a bit more. We also use Kruskal - Wallis as it has more power than a permutation test when exposed to outliers, or a skewed distribution in 1 or more of the groups. We will be using the regular Kruskal - Wallis Test as the Large Sample Approximation requires the sample size to be n $\ge$ 30 which in this case the dataset has only 19. 
 
 \circled{III} \textbf{Analysis}
 
@@ -148,6 +148,7 @@ many.perms.KW = sapply(1:R,function(i){
   return(KW.i)
 })
 p.value = mean(many.perms.KW > KW.OBS)
+#End of 1st part of Project code
 ```
 
 We than perform the test and find that using the KW test with 4000 permutations gives an p-value of .3395.
@@ -167,7 +168,7 @@ many.perms = sapply(1:R,function(i){
 })
 F.OBS = summary(lm(Death ~ State, data = CovidA_sub))$fstatistic["value"]
 mean(many.perms >= F.OBS)
-
+#End of 1st part of Project code
 ```
 
 \circled{IV} \textbf{Interpretation}
@@ -183,6 +184,7 @@ We conclude thus that all the 4 groups are all similar with none of them being s
 
 \circled{II} \textbf{Summary of Data}
 
+\circled{III} \textbf{Analysis}
 
 \circled{IV} \textbf{Interpretation}
 
