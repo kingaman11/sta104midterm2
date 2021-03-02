@@ -82,9 +82,11 @@ library(lawstat)
 levene.test(CovidA_sub$Death,as.factor(CovidA_sub$State))
 ```
 
+Looking at the summary statistics, it seems as though that the average number of deaths in significantly higher in New York City as well as California, compared to Florida and Alabama. This might be due to the fact of the population and the tourism that the 2 democratic states get attracted to such as the beautiful beaches in California to the famous Times Squared in New York City.
+
 We see from the Shapiro- Wilks test based on the hypothesis that the variable is normally distributed in the dataset. We see that since the p-value is really low, we reject the null hypothesis and confirm that that the variable is not normally distributed. We also use the Levene test to test if K samples have equal variances and find that we fail to reject the null hypothesis thus concluding that no violations of any assumptions have happened. 
 
-In this forthcoming graph, I purposely ended up changing a dataset column where I made a replica of the subsetted graph that we had from the CovidA dataset. I then changed the months to where month 1 was January of 2020 and month 14 was February of 2021. This helped in viewing the graphs as there was no data for every month and when I first did the graph, specifically for NYC, there was no data of February of 2020 but there was of February 2021. This confused GGplot and instead of skipping February of 2020, it displayed the plot of February 2021 instead, which changes the whole graph. I also added another column in the dataset which has the abbreviation names for the months for aesthetically pleasing graphs using GGplot. This graph really helps visualize the whole dataset and understand what we will be doing in this analysis. 
+In this forthcoming graph, I purposely ended up changing a dataset column where I made a replica of the subsetted graph that we had from the `CovidA` dataset. I then changed the months to where month 1 was January of 2020 and month 14 was February of 2021. This helped in viewing the graphs as there was no data for every month and when I first did the graph, specifically for NYC, there was no data of February of 2020 but there was of February 2021. This confused GGplot and instead of skipping February of 2020, it displayed the plot of February 2021 instead, which changes the whole graph. I also added another column in the dataset which has the abbreviation names for the months for aesthetically pleasing graphs using GGplot. This graph really helps visualize the whole dataset and understand what we will be doing in this analysis. 
 
 
 ```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
@@ -123,7 +125,7 @@ ggplot(CovidA_sub, aes(x=Death, y=State,color = State)) +
        subtitle = "Analysis of California, Florida, Alabama & New York City Covid-19 Deaths",
        y = "States", x = "Deaths per month")
 ```
-Looking at this dataset, we see that there are outliers in multiple groups as well as skewed distributions as well. This leads us to believe to use the Kruskal - Wallis Test in order to understand the results a bit more. We also use Kruskal - Wallis as it has more power than a permutation test when exposed to outliers, or a skewed distribution in 1 or more of the groups. We will be using the regular Kruskal - Wallis Test as the Large Sample Approximation requires the sample size to be n $\ge$ 30 which in this case the dataset has only 19. 
+Looking at this graph, we see that there are outliers in multiple groups as well as skewed distributions as well. This leads us to believe to use the Kruskal - Wallis Test in order to understand the results a bit more. We also use Kruskal - Wallis as it has more power than a permutation test when exposed to outliers, or a skewed distribution in 1 or more of the groups. We will be using the regular Kruskal - Wallis Test as the Large Sample Approximation requires the sample size to be n $\ge$ 30 which in this case the dataset has only 19. 
 
 \circled{III} \textbf{Analysis}
 
