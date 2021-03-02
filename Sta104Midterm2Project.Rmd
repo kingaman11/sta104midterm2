@@ -1,5 +1,5 @@
 ---
-title: "STA 104: Take Home Project  \nLooking into States that are being affected from Covid-19"
+title: "STA 104: Take Home Project"
 author: "Aman Singh & Peter Mueller  \namasin@ucdavis.edu  \npfmueller@ucdavis.edu  \nUC Davis  \n Instructor: Amy T. Kim  "
 date: "2/28/2021"
 output: pdf_document
@@ -10,6 +10,10 @@ header-includes:
   -  \posttitle{\end{center}}
   -  \usepackage{blindtext}
 ---
+\newpage
+\begin{center}
+\LARGE{Question 1: K or more groups}
+\end{center}
 \newpage
 ```{r, echo = F}
 #cuttingoffcode
@@ -180,11 +184,209 @@ Since the P-value was larger than $\alpha$, we conclude that we fail to reject t
 We conclude thus that all the 4 groups are all similar with none of them being statistically significant. This comes to us as shocking as Democrats being California & NYC have been enforcing very serious covid restrictions. I also expected the Republican states being Alabama and Florida groups to differ. However, we should also not take this conclusion as an definite answer as there are many other confounding variables in play such as the fact that the population size in California and NYC combined is almost 60 million people. On the other side, Alabama and Florida have a combined of only 25 million. Thus it is more likely to result in more deaths in California and NYC compared to Alabama and Florida. There are also many other confounding variables that we should account for in our analysis such as weather, amount of people traveling between states, age of the population, and even how all the data was collected and arranged. There has been a lot of fake data spread around such as mentioned earlier with the data scientist. We might never be able to get an accurate depiction on whether the states are statistically significant or not due to misconception of data. 
 
 \newpage
+\begin{center}
+
+\LARGE{Question 2: Tests for Independence}
+\end{center}
+\newpage
 \circled{I} \textbf{Introduction}
 
+In this section of our report, we test the given data set (`CovidB.csv`) to see if there are any dependencies between any of the variables in the given data set. Our data set consists of the following variables: Year (the year in which the death occurred), Month (the month in which the death occurred), Sex (whether the deceased was male or female), Age Group (the age of the deceased at the time of their death), and Death (the number of deaths within each of the previous categories). We will test for independence between each of these variables using the techniques learned in Lecture, such as the Parametric $\chi^2$ test and Permutation test for independence.
+
+For our project, we have filtered the given data into a smaller subset that concentrates around the 2020 holiday season; particularly October - December of 2020. This will give us insight as to whether or not the holiday season has an impact on the number of deaths.
+
+```{r Filtering the data, include=FALSE}
+
+library(readr)
+CovidB <- read_csv("CovidB.csv")
+
+
+Covid_B_sub = subset(CovidB, CovidB$Month == 10 & CovidB$Age_Group == "0-17 years" 
+                     | CovidB$Month == 10 & CovidB$Age_Group == "18-29 years"
+                     | CovidB$Month == 10 & CovidB$Age_Group == "45-54 years"
+                     | CovidB$Month == 10 & CovidB$Age_Group == "55-64 years"
+                     | CovidB$Month==11 & CovidB$Age_Group == "0-17 years"
+                     | CovidB$Month==11 & CovidB$Age_Group == "18-29 years"
+                     | CovidB$Month==11 & CovidB$Age_Group == "45-54 years"
+                     | CovidB$Month==11 & CovidB$Age_Group == "55-64 years"
+                     | CovidB$Month==12 & CovidB$Age_Group == "0-17 years"
+                     | CovidB$Month==12 & CovidB$Age_Group == "18-29 years"
+                     | CovidB$Month==12 & CovidB$Age_Group == "45-54 years"
+                     | CovidB$Month==12 & CovidB$Age_Group == "55-64 years")
+```
+
 \circled{II} \textbf{Summary of Data}
+Below we have the first 4 lines of our altered data set:
+```{r, echo=FALSE}
+head(Covid_B_sub, 4)
+```
+
+Next, we will find the average number of deaths for each variable, along with its standard deviation. We will start with the variable `Months`:
+```{r average and sd_month, echo=FALSE}
+
+average_death_by_month = aggregate(Death ~ Month, data = Covid_B_sub, mean)
+average_death_by_month
+
+sd_death_by_month = aggregate(Death ~ Month, data = Covid_B_sub, sd)
+sd_death_by_month
+```
+
+As we can see above, the average number of deaths increases as we progress into the holiday season. This time period is also known for colder weather and is typically the Flu season. These factors may also play a role in the increased number of deaths.
+
+
+Next, we have the variable `Age Group`:
+```{r average and sd_age_group, echo=FALSE}
+
+average_death_by_age = aggregate(Death ~ Age_Group, data = Covid_B_sub, mean)
+average_death_by_age
+
+sd_death_by_age = aggregate(Death ~ Age_Group, data = Covid_B_sub, sd)
+sd_death_by_age
+```
+
+When looking at the groups that are most affected by Covid-19, we notice that as the age range of the subject increases, so does the death count.
+
+
+Finally, we have the variable `Sex`:
+
+```{r average and sd_sex, echo=FALSE}
+
+average_death_by_sex = aggregate(Death ~ Sex, data = Covid_B_sub, mean)
+average_death_by_sex
+
+sd_death_by_sex = aggregate(Death ~ Sex, data = Covid_B_sub, sd)
+sd_death_by_sex
+```
+
+As we can see above, there are far more male deaths than female deaths, almost by a factor of 2. This can be interpreted very widely, so we will conduct further analysis later in the report.
+
+
+Below we have a box-plot for each month in our selected range:
+
+
+```{r Box-plot_month, echo=FALSE}
+
+library(ggplot2)
+boxplot(Death ~ Month, data = Covid_B_sub, main = "Covid-19 Deaths by Month", horizontal = TRUE)
+```
+
+As we can see from the above plot, the deaths increase as we get closer to the holiday season.
+
+
+Below we have a box-plot for each age group in our selected range:
+
+
+```{r Box-plot_age_group, echo=FALSE}
+
+boxplot(Death ~ Age_Group, data = Covid_B_sub, main = "Covid-19 Deaths by Age Group", horizontal = TRUE)
+```
+
+As we can see above, there is a large difference in deaths between age groups. This makes sense, as those who are older have weaker immune systems, and are therefore less able to fight off the virus once infected.
+
+
+Below we have a box-plot for each sex:
+
+```{r Box-plot_sex, echo=FALSE}
+
+boxplot(Death ~ Sex, data = Covid_B_sub, main = "Covid-19 Deaths by Sex", horizontal = TRUE)
+```
+
+Here we see that males account for a much larger portion of those who die from the Covid-19 virus.
 
 \circled{III} \textbf{Analysis}
+
+In this section of the report we will be analyzing our data to answer the following question: Are Sex and Age Group independent in relation to Covid-19 deaths? We will use two tests to help determine the answer. The first test we will use is the Parametric $\chi^2$ test and the second is the Permutation test for independence.
+
+We will start our analysis by looking at the contingency table formed from our filtered data:
+
+```{r Contingency Table, echo=FALSE, warning=FALSE}
+
+contingency_table = xtabs(Death ~ Sex + Age_Group, data = Covid_B_sub)
+contingency_table
+```
+
+Now that we have our table, we will form a null and alternative hypothesis:
+
+
+
+$H_o:$ The sex and age group of a patient regarding Covid-19 deaths is independent.
+
+$H_A:$ The sex and age group of a patient regarding Covid-19 deaths is dependent.
+
+
+Now we can calculate our test statistic, $\chi^2$:
+```{r Chi-Squared Value and Chi-Square Test, echo=FALSE}
+
+ni. = rowSums(contingency_table)
+n.j = colSums(contingency_table)
+
+the.test = chisq.test(contingency_table,correct = FALSE)
+eij = the.test$expected
+chi.sq.obs = as.numeric(the.test$statistic)
+
+chi.sq.obs
+```
+
+Here we can see our $\chi^2$ value above is 17.91532.
+
+
+Next, we will proceed with obtaining a p-value by using the Permutation test:
+
+```{r Permutation Test, echo=FALSE}
+
+set.seed(3223)
+R = 4000
+r.perms = sapply(1:R,function(i){
+  perm.data = Covid_B_sub
+  perm.data$Age_Group = sample(perm.data$Age_Group,nrow(perm.data),replace = FALSE)
+  chi.sq.i = chisq.test(contingency_table,correct = FALSE)$stat
+  return(chi.sq.i)
+})
+perm.pval = mean(r.perms >= chi.sq.obs)
+perm.pval
+```
+
+As we can see above, our permutation based p-value is 1.
+
+```{r, echo=FALSE}
+
+n = sum(contingency_table)
+ni. = rowSums(contingency_table)
+n.j = colSums(contingency_table)
+all.pjG1 = contingency_table[1,]/ni.[1]
+all.pjG2= contingency_table[2,]/ni.[2] 
+all.pbar = n.j/n 
+all.Zij = c(all.pjG1 - all.pjG2)/sqrt(all.pbar*(1-all.pbar)*(1/ni.[1] + 1/ni.[2])) 
+```
+
+Next, we find the Tukey-Inspired cutoff value:
+
+```{r, echo=FALSE}
+
+r.perms.cutoff = sapply(1:R,function(i){
+  perm.data = Covid_B_sub
+  perm.data$Sex = sample(perm.data$Sex,nrow(perm.data),replace = FALSE)
+  row.sum = rowSums(contingency_table)
+  col.sum = colSums(contingency_table)
+  all.pji = contingency_table[1,]/row.sum[1]
+  all.pji.= contingency_table[2,]/row.sum[2]
+  all.pbar = col.sum/sum(row.sum)
+  all.Zij = c(all.pji - all.pji.)/sqrt(all.pbar*(1-all.pbar)*(1/row.sum[1] + 1/row.sum[2]))
+  Q.r = max(abs(all.Zij))
+  return(Q.r)
+})
+alpha = 0.05
+cutoff.q = as.numeric(quantile(r.perms.cutoff,(1-alpha)))
+cutoff.q
+```
+
+Lastly, we have our observed values:
+```{r, echo=FALSE}
+all.Zij_2 = matrix(all.Zij,nrow=  1)
+colnames(all.Zij_2) = c("0-17 Years","18-29 Years","45-54 Years", "55-64 Years")
+rownames(all.Zij_2) = c("Males vs. Females")
+all.Zij_2
+```
 
 \circled{IV} \textbf{Interpretation}
 
