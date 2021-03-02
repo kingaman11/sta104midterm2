@@ -196,7 +196,6 @@ In this section of our report, we test the given data set (`CovidB.csv`) to see 
 For our project, we have filtered the given data into a smaller subset that concentrates around the 2020 holiday season; particularly October - December of 2020. This will give us insight as to whether or not the holiday season has an impact on the number of deaths.
 
 ```{r Filtering the data, include=FALSE}
-
 library(readr)
 CovidB <- read_csv("CovidB.csv")
 
@@ -216,13 +215,30 @@ Covid_B_sub = subset(CovidB, CovidB$Month == 10 & CovidB$Age_Group == "0-17 year
 ```
 
 \circled{II} \textbf{Summary of Data}
+
 Below we have the first 4 lines of our altered data set:
-```{r, echo=FALSE}
+```{r, echo=FALSE,include=FALSE}
 head(Covid_B_sub, 4)
 ```
 
+\begin{table}[ht]
+\centering
+\caption{First 4 rows:}
+\begin{tabular}[t]{lcccc}
+\hline
+\textbf{Year} & \textbf{Month} & \textbf{Sex} & \textbf{Age group} & \textbf{Death}\\
+\hline
+2020 & 10 & Male & 0-17 years & 6\\
+2020 & 10 & Male & 18-29 years & 41\\
+2020 & 10 & Male & 45-54 years & 667\\
+2020 & 10 & Male & 55-64 years & 1689\\ 
+\hline
+\end{tabular}
+\end{table}
+
+
 Next, we will find the average number of deaths for each variable, along with its standard deviation. We will start with the variable `Months`:
-```{r average and sd_month, echo=FALSE}
+```{r average and sd_month, echo=FALSE,include=FALSE}
 
 average_death_by_month = aggregate(Death ~ Month, data = Covid_B_sub, mean)
 average_death_by_month
@@ -230,12 +246,25 @@ average_death_by_month
 sd_death_by_month = aggregate(Death ~ Month, data = Covid_B_sub, sd)
 sd_death_by_month
 ```
+\begin{table}[ht]
+\centering
+\caption{Average and SD of Month}
+\begin{tabular}[t]{lcc}
+\hline
+\textbf{Month} & \textbf{Average Mean} & \textbf{Standard Deviation} \\
+\hline
+10 & 471.500 & 611.002\\
+11 & 908.875 & 1188.628\\
+12 & 1745.250 & 2290.832\\
+\hline
+\end{tabular}
+\end{table}
 
 As we can see above, the average number of deaths increases as we progress into the holiday season. This time period is also known for colder weather and is typically the Flu season. These factors may also play a role in the increased number of deaths.
 
 
 Next, we have the variable `Age Group`:
-```{r average and sd_age_group, echo=FALSE}
+```{r average and sd_age_group, echo=FALSE,include=FALSE}
 
 average_death_by_age = aggregate(Death ~ Age_Group, data = Covid_B_sub, mean)
 average_death_by_age
@@ -243,13 +272,27 @@ average_death_by_age
 sd_death_by_age = aggregate(Death ~ Age_Group, data = Covid_B_sub, sd)
 sd_death_by_age
 ```
+\begin{table}[ht]
+\centering
+\caption{Average and SD of Age Group}
+\begin{tabular}[t]{lcc}
+\hline
+\textbf{Age Group} & \textbf{Average Mean} & \textbf{Standard Deviation} \\
+\hline
+0-17 years & 10.33333	 & 3.204164	\\
+18-29 years & 75.50000 & 42.378060	\\
+45-54 years & 1104.83333 & 761.362310	\\
+55-64 years & 2976.83333 & 1926.509841\\
+\hline
+\end{tabular}
+\end{table}
 
 When looking at the groups that are most affected by Covid-19, we notice that as the age range of the subject increases, so does the death count.
 
 
 Finally, we have the variable `Sex`:
 
-```{r average and sd_sex, echo=FALSE}
+```{r average and sd_sex, echo=FALSE,include=FALSE}
 
 average_death_by_sex = aggregate(Death ~ Sex, data = Covid_B_sub, mean)
 average_death_by_sex
@@ -258,16 +301,31 @@ sd_death_by_sex = aggregate(Death ~ Sex, data = Covid_B_sub, sd)
 sd_death_by_sex
 ```
 
+\begin{table}[ht]
+\centering
+\caption{Average and SD of Sex}
+\begin{tabular}[t]{lcc}
+\hline
+\textbf{Sex} & \textbf{Average Mean} & \textbf{Standard Deviation} \\
+\hline
+Female & 751.5833	& 1091.165	\\
+Male & 1332.1667 & 1926.396	\\
+\hline
+\end{tabular}
+\end{table}
+
 As we can see above, there are far more male deaths than female deaths, almost by a factor of 2. This can be interpreted very widely, so we will conduct further analysis later in the report.
 
 
 Below we have a box-plot for each month in our selected range:
 
 
-```{r Box-plot_month, echo=FALSE}
-
-library(ggplot2)
-boxplot(Death ~ Month, data = Covid_B_sub, main = "Covid-19 Deaths by Month", horizontal = TRUE)
+```{r,warning=TRUE,echo=FALSE,results=FALSE,message = FALSE,include=TRUE,fig.align="center",out.width="80%"}
+ggplot(Covid_B_sub, aes(x =Month, y = Death,group = Month,color = Month)) + 
+  geom_boxplot()   + 
+  labs(title = "Covid-19 Deaths by Month",
+       subtitle = "Analysis of Covid-19 Deaths",
+       y = "Death", x = "Month")
 ```
 
 As we can see from the above plot, the deaths increase as we get closer to the holiday season.
@@ -276,9 +334,12 @@ As we can see from the above plot, the deaths increase as we get closer to the h
 Below we have a box-plot for each age group in our selected range:
 
 
-```{r Box-plot_age_group, echo=FALSE}
-
-boxplot(Death ~ Age_Group, data = Covid_B_sub, main = "Covid-19 Deaths by Age Group", horizontal = TRUE)
+```{r,warning=TRUE,echo=FALSE,results=FALSE,message = FALSE,include=TRUE,fig.align="center",out.width="80%"}
+ggplot(Covid_B_sub, aes(x =Age_Group, y = Death,group = Age_Group,color = Age_Group)) + 
+  geom_boxplot()   + 
+  labs(title = "Covid-19 Deaths by Age Group",
+       subtitle = "Analysis of Covid-19 Deaths",
+       y = "Death", x = "Age Group")
 ```
 
 As we can see above, there is a large difference in deaths between age groups. This makes sense, as those who are older have weaker immune systems, and are therefore less able to fight off the virus once infected.
@@ -286,9 +347,12 @@ As we can see above, there is a large difference in deaths between age groups. T
 
 Below we have a box-plot for each sex:
 
-```{r Box-plot_sex, echo=FALSE}
-
-boxplot(Death ~ Sex, data = Covid_B_sub, main = "Covid-19 Deaths by Sex", horizontal = TRUE)
+```{r,warning=TRUE,echo=FALSE,results=FALSE,message = FALSE,include=TRUE,fig.align="center",out.width="80%"}
+ggplot(Covid_B_sub, aes(x =Sex, y = Death,group = Sex,color = Sex)) + 
+  geom_boxplot()   + 
+  labs(title = "Covid-19 Deaths by Sex",
+       subtitle = "Analysis of Covid-19 Deaths",
+       y = "Death", x = "Sex")
 ```
 
 Here we see that males account for a much larger portion of those who die from the Covid-19 virus.
@@ -299,22 +363,51 @@ In this section of the report we will be analyzing our data to answer the follow
 
 We will start our analysis by looking at the contingency table formed from our filtered data:
 
-```{r Contingency Table, echo=FALSE, warning=FALSE}
+```{r Contingency Table, echo=FALSE, warning=FALSE,include=FALSE}
 
 contingency_table = xtabs(Death ~ Sex + Age_Group, data = Covid_B_sub)
 contingency_table
 ```
 
+\begin{table}[ht]
+\centering
+\caption{Contingency Table}
+\begin{tabular}[t]{lcccc}
+\hline
+\textbf{Sex} & \textbf{0-17 years} & \textbf{18-29 years} & \textbf{45-54 years} & \textbf{55-64 years}\\
+\hline
+Female & 29	& 183 & 2273 & 6534	\\
+Male & 33 & 270 & 4356 & 11327	\\
+\hline
+\end{tabular}
+\end{table}
+
+
 Now that we have our table, we will form a null and alternative hypothesis:
 
 
-
+\begin{center}
 $H_o:$ The sex and age group of a patient regarding Covid-19 deaths is independent.
 
 $H_A:$ The sex and age group of a patient regarding Covid-19 deaths is dependent.
+\end{center}
+
+Now we can calculate our test statistic, $\chi^2$. We than proceed to do the permutation test after obtaining the $\chi^2$. We use 4000 permutations for the test. We also than find the Tukey-Inspired cutoff value. All the results are included in the following table for ease.
+
+\begin{table}[ht]
+\centering
+\caption{Tests}
+\begin{tabular}[t]{lccc}
+\hline
+ \textbf{$\chi^2$} & \textbf{Permutation Test P-value} & \textbf{Tukey cutoff value} \\
+\hline
+17.91532	& 1 & 3.520652 	\\
+\hline
+\end{tabular}
+\end{table}
 
 
-Now we can calculate our test statistic, $\chi^2$:
+
 ```{r Chi-Squared Value and Chi-Square Test, echo=FALSE}
 
 ni. = rowSums(contingency_table)
@@ -324,16 +417,10 @@ the.test = chisq.test(contingency_table,correct = FALSE)
 eij = the.test$expected
 chi.sq.obs = as.numeric(the.test$statistic)
 
-chi.sq.obs
 ```
 
-Here we can see our $\chi^2$ value above is 17.91532.
-
-
-Next, we will proceed with obtaining a p-value by using the Permutation test:
 
 ```{r Permutation Test, echo=FALSE}
-
 set.seed(3223)
 R = 4000
 r.perms = sapply(1:R,function(i){
@@ -343,10 +430,8 @@ r.perms = sapply(1:R,function(i){
   return(chi.sq.i)
 })
 perm.pval = mean(r.perms >= chi.sq.obs)
-perm.pval
 ```
 
-As we can see above, our permutation based p-value is 1.
 
 ```{r, echo=FALSE}
 
@@ -359,7 +444,6 @@ all.pbar = n.j/n
 all.Zij = c(all.pjG1 - all.pjG2)/sqrt(all.pbar*(1-all.pbar)*(1/ni.[1] + 1/ni.[2])) 
 ```
 
-Next, we find the Tukey-Inspired cutoff value:
 
 ```{r, echo=FALSE}
 
@@ -377,20 +461,52 @@ r.perms.cutoff = sapply(1:R,function(i){
 })
 alpha = 0.05
 cutoff.q = as.numeric(quantile(r.perms.cutoff,(1-alpha)))
-cutoff.q
 ```
 
 Lastly, we have our observed values:
-```{r, echo=FALSE}
+```{r, echo=FALSE,include=FALSE}
 all.Zij_2 = matrix(all.Zij,nrow=  1)
 colnames(all.Zij_2) = c("0-17 Years","18-29 Years","45-54 Years", "55-64 Years")
 rownames(all.Zij_2) = c("Males vs. Females")
 all.Zij_2
 ```
 
+\begin{table}[ht]
+\centering
+\caption{Observed Values}
+\begin{tabular}[t]{lcccc}
+\hline
+ & \textbf{0-17 years} & \textbf{18-29 years} & \textbf{45-54 years} & \textbf{55-64 years} \\
+\hline
+Males vs. Females & 1.757583	& 1.936158 & -3.520652 & 2.67481 	\\
+\hline
+\end{tabular}
+\end{table}
+
 \circled{IV} \textbf{Interpretation}
 
+In our analysis, we started with the following null and alternative hypothesis:
+
+\begin{center}
+$H_o:$ The sex and age group of a patient regarding Covid-19 deaths is independent.
+
+$H_A:$ The sex and age group of a patient regarding Covid-19 deaths is dependent.
+
+\end{center}
+
+Using the above test statistics and p-values, and by testing at a significance level $\alpha = 0.05$, we can conclude that since the p-value of $1$ is larger than our significance level, we fail to reject $H_o$ and conclude that the sex and age group of a given patient are independent in relation to Covid-19 death rates.
+
+This tells us that the likelihood of a male dying from Covid-19 is the same regardless of what age group he is in. As we can see from the averages in the Summary section, males are almost twice as likely to die from the Covid-19 virus than females are. This could be due to the fact that males are more likely to take risks and are usually less attentive to rules than females are.
+
+From our observed values, we can see that the greatest difference in the death rate between age groups was between the age group $45-54$ years and $55-64$ years, with a difference in observed values of $6.195$. This is well above the Tukey-Inspired Cutoff value of $3.521$, meaning that this difference is significant. There was also a significant difference between the age group $45-54$ years and the other two groups as well, with their differences coming in at $5.278$ for the age group $0-17$ years and $5.457$ for the age group $18-29$ years. This indicates that the biggest jump in deaths occurred between the age group $45-54$ years and the other groups. As the data suggested in the Summary section, the gap in the death rate between age groups increased significantly as the age increased.
+
 \circled{V} \textbf{Conclusion}
+
+In conclusion, what we learned in this report is that gender and age are independent when it comes to Covid-19 death rates. We also saw that males have a higher recorded death rate than females, that the death rate increases with age, and that the death rates spiked during the winter months of 2020. The spike in the death rate in the later months of the year could be from a variety of factors. 
+
+Firstly, the winter months are known as the flu season. If a person's immune system is fighting the flu, then it is weaker, giving Covid-19 a better fighting chance. Second, the winter months contain the holiday season. This influences people to ignore safety protocols due to their adherence to traditions such as Halloween, Thanksgiving, Christmas/Hanukka/Kwanza, and the New Year celebration. These events usually require family and/or friends to gather, which helps the virus spread and infect more people. This is a catalyst for the virus to take more lives.
+
+I'd like to note that these are observations, and we should never take correlation of data to have a causal relationship. This is a mere extrapolation of the data, and should be taken as such. However, there is a trend that is hard to ignore. Thank you for your time, and your attention throughout this report!
 
 \newpage
 \circled{VI} \center{\textbf{Code Appendix}}
