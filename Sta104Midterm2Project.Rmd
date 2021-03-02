@@ -127,7 +127,7 @@ Looking at this dataset, we see that there are outliers in multiple groups as we
 
 \circled{III} \textbf{Analysis}
 
-Since we have seen that we will be using the Kruskal - Wallis Test, we will be using ranks instead of the actual $X_{ij}$ values. We will then make an Confidence Interval to see the difference in ranks. Our null hypothesis in using the Kruskal - Wallis Test is:
+Since we have seen that we will be using the Kruskal - Wallis Test, we will be using ranks instead of the actual $X_{ij}$ values. Our null hypothesis in using the Kruskal - Wallis Test is:
 
 \begin{center}
 $H_0: F_1(x) = F_2(x) = F_3(x) = F_4(x)$
@@ -156,24 +156,6 @@ p.value = mean(many.perms.KW > KW.OBS)
 ```
 
 We than perform the test and find that using the KW test with 4000 permutations gives an p-value of .3395.
-
-##Dont know if we want to include this yet
-We also perform an Permutation Test and find that the p-value while setting the seed presented .7025. This also showed an similar result as the KW test. 
-
-```{r,warning=FALSE,echo=FALSE,results=FALSE,include=FALSE}
-#Permutation Test
-set.seed(2)
-R = 4000
-many.perms = sapply(1:R,function(i){
-  permuted.data = CovidA_sub #So we don't overwrite the original data
-  permuted.data$State = sample(permuted.data$State, nrow(permuted.data), replace = FALSE) #Permuting the groups
-  Fi = summary(lm(Death ~ State, data = permuted.data))$fstatistic["value"]
-  return(Fi)
-})
-F.OBS = summary(lm(Death ~ State, data = CovidA_sub))$fstatistic["value"]
-mean(many.perms >= F.OBS)
-#End of 1st part of Project code
-```
 
 \circled{IV} \textbf{Interpretation}
 
