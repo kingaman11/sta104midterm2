@@ -1,7 +1,7 @@
 ---
 title: "STA 104: Take Home Project"
 author: "Aman Singh & Peter Mueller  \namasin@ucdavis.edu  \npfmueller@ucdavis.edu  \nUC Davis  \n Instructor: Amy T. Kim  "
-date: "2/28/2021"
+date: "3/02/2021"
 output: pdf_document
 header-includes:
   - \usepackage{titling}
@@ -127,7 +127,7 @@ Looking at this dataset, we see that there are outliers in multiple groups as we
 
 \circled{III} \textbf{Analysis}
 
-Since we have seen that we will be using the Kruskal - Wallis Test, we will be using ranks instead of the actual $X_{ij}$ values. Our null hypothesis in using the Kruskal - Wallis Test is:
+Since we have seen that we will be using the Kruskal - Wallis Test, we will be using ranks instead of the actual $X_{ij}$ values.Our null hypothesis in using the Kruskal - Wallis Test is:
 
 \begin{center}
 $H_0: F_1(x) = F_2(x) = F_3(x) = F_4(x)$
