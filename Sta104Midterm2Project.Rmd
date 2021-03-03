@@ -273,6 +273,7 @@ sd_death_by_age
 
 When looking at the groups that are most affected by Covid-19, we notice that as the age range of the subject increases, so does the death count.
 
+\newpage
 
 Finally, we have the variable `Sex`:
 
